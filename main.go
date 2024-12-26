@@ -1,11 +1,23 @@
 package main
 
-import "net/http"
+import (
+	"html/template"
+	"net/http"
+)
+
+type mot struct { 
+	word string 
+}
+
+var data mot 
 
 func main ()  {
-	http.HandleFunc("/hello-world" , func ( w http.ResponseWriter,r *http.Request ) {
-		w.Write([]byte("hello world"))
-	})
-	http.ListenAndServe(":8081", nil)
+	data.word = "Bonjour"
+	http.HandleFunc("/" , page)
+	http.ListenAndServe(":8080", nil)
 	
+}
+func page(w http.ResponseWriter, r *http.Request) { 
+	tmpl := template.Must(template.ParseFiles("index.html"))
+	tmpl.Execute(w, data)
 }
