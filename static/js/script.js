@@ -1,30 +1,66 @@
-// On crée la variable ul
-var a = document.createElement('ul');
-var b = document.createElement('ul')
-var un = document.getElementById('un');
-var deux = document.getElementById('deux');  
+// On récupère le main
+var main = document.getElementById("main");
 
-/*
-// Faire la requête fetch
-fetch('https://cors-anywhere.herokuapp.com/https://groupietrackers.herokuapp.com/api/artists')
-  .then(response => {
-    return response.json();  // Convertir la réponse en JSON
-  })
-  .then(data => {
-    console.log(data);  // Afficher la réponse de l'API pour vérifier la structure des données
+// Faire la requête fetch pour récupérer les artistes
+fetch('https://thingproxy.freeboard.io/fetch/https://groupietrackers.herokuapp.com/api/artists')
+  .then(response => response.json()) // Convertir la réponse en JSON
+  .then(artists => {
+    console.log(artists); // Vérifiez les données des artistes dans la console
 
-    var artists = data;  // Si 'data' est déjà le tableau d'artistes, pas besoin de faire un autre accès
+    // Parcourir chaque artiste
+    for (let artist of artists) { // Utiliser "let" pour une portée correcte
+      // Créer les éléments principaux pour l'affichage
+      const cadre = document.createElement("div");
+      const wr = document.createElement("div");
+      const text1 = document.createElement("h3");
+      const text2 = document.createElement("p");
+      const text3 = document.createElement("p");
 
-   
-    for (var artist of artists) {  // On parcourt les artistes
-      var li = document.createElement("li");  // Créer un élément de liste pour chaque artiste
-      var img = document.createElement("img")
-      img.setAttribute("src", artist.image)
-      li.appendChild(img)
-      a.appendChild(li);  // Ajouter l'élément <li> à la liste <ul>
+      // Remplir les informations de l'artiste
+      text1.innerText = artist.name;
+      text2.innerText = "Beginning = " + artist.creationDate;
+
+      // Créer l'image de l'artiste
+      const img = document.createElement("img");
+      img.setAttribute("src", artist.image);
+      img.setAttribute("alt", artist.name);
+
+      // Ajouter une classe pour le style
+      cadre.setAttribute("class", "cont");
+
+      // Ajouter les éléments au cadre
+      cadre.appendChild(img);
+      wr.appendChild(text1);
+      wr.appendChild(text2);
+
+      // Récupérer les relations de l'artiste
+      fetch('https://thingproxy.freeboard.io/fetch/' + artist.relations)
+        .then(response => response.json())
+        .then(relations => {
+          console.log(relations); // Vérifiez les relations dans la console
+          if (relations.datesLocations) {
+            text3.innerText = `Upcoming concerts: ${Object.keys(relations.datesLocations).length} locations`;
+          } else {
+            text3.innerText = "No relations found.";
+          }
+          wr.appendChild(text3); // Ajouter les relations après les avoir récupérées
+        })
+        .catch(error => {
+          console.error("Error fetching relations:", error);
+          text3.innerText = "Error fetching relations.";
+          wr.appendChild(text3); // Afficher une erreur dans l'interface utilisateur
+        });
+
+      // Ajouter le wrapper au cadre
+      cadre.appendChild(wr);
+
+      // Ajouter le cadre au DOM
+      main.appendChild(cadre);
     }
-
-    // Ajouter la liste <ul> au DOM (par exemple à un élément avec l'id 'artists-list')
-    un.appendChild(a);  // Vous pouvez aussi ajouter ceci à un élément spécifique
   })
-*/
+  .catch(error => {
+    console.error("Error fetching artists:", error);
+    const errorText = document.createElement("p");
+    errorText.innerText = "Error loading artists.";
+    main.appendChild(errorText);
+  });
