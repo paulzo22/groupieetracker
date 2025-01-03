@@ -15,10 +15,12 @@ fetch('https://thingproxy.freeboard.io/fetch/https://groupietrackers.herokuapp.c
       const text1 = document.createElement("h3");
       const text2 = document.createElement("p");
       const text3 = document.createElement("p");
+      const text4 = document.createElement("p") ; 
 
       // Remplir les informations de l'artiste
       text1.innerText = artist.name;
       text2.innerText = "Beginning = " + artist.creationDate;
+      text4.innerText = "First album = " + artist.firstAlbum ; 
 
       // Créer l'image de l'artiste
       const img = document.createElement("img");
@@ -32,6 +34,7 @@ fetch('https://thingproxy.freeboard.io/fetch/https://groupietrackers.herokuapp.c
       cadre.appendChild(img);
       wr.appendChild(text1);
       wr.appendChild(text2);
+      wr.appendChild(text4)
 
       // Récupérer les relations de l'artiste
       fetch('https://thingproxy.freeboard.io/fetch/' + artist.relations)
@@ -63,4 +66,4 @@ fetch('https://thingproxy.freeboard.io/fetch/https://groupietrackers.herokuapp.c
     const errorText = document.createElement("p");
     errorText.innerText = "Error loading artists.";
     main.appendChild(errorText);
-  });
+  })
