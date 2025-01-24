@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <title>Document</title>
+    <title>Liste des Artistes</title>
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
-<body id="index-page">
-    <header>
-        <h1>Groupie trackers</h1>
-    </header>
-    <main id="main"></main>
-    <footer></footer>
-    <script src="/static/logiquespages/js/script.js"></script>
+<body>
+    <div>
+        <h1>Liste des Artistes</h1>
+    </div>
+    <div id="cont">
+        {{range .}}
+        <div>
+            <h2>{{.Name}}</h2>
+            <img src="{{.Image}}" alt="{{.Name}}" width="200">
+            <p><strong>Begining :</strong> {{.CreationDate}}</p>
+            <p><strong>First album :</strong> {{.FirstAlbum}}</p>
+            <p><strong>Members :</strong> {{range .Members}}{{.}}, {{end}}</p>
+        </div>
+        {{end}}
+    </div>
 </body>
 </html>
